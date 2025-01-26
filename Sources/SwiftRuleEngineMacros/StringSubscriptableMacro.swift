@@ -52,7 +52,7 @@ public struct StringSubscriptableMacro: ExtensionMacro {
         return [try ExtensionDeclSyntax("""
         extension \(raw: typeName.name.text): StringSubscriptable {
             \(keys)
-            subscript(key: String) -> Any? {
+            public subscript(key: String) -> Any? {
                 guard let kp = Self.keys[key] else {
                     return nil
                 }
@@ -72,7 +72,7 @@ public struct StringSubscriptableMacro: ExtensionMacro {
                   let name = binding.pattern.as(IdentifierPatternSyntax.self) else {
                 continue
             }
-            keys.append("\"\(camelCaseToSnakeCase(name.identifier.text))\": \\.\(name)")
+            keys.append("\"\(name.identifier.text)\": \\.\(name)")
         }
         let tab = "    "
         keys = keys.map { "\(tab)\($0)" }
@@ -84,16 +84,16 @@ public struct StringSubscriptableMacro: ExtensionMacro {
         """
     }
 
-    private static func camelCaseToSnakeCase(_ input: String) -> String {
-        // Create a regular expression to match the boundaries between lowercase and uppercase letters
-        let pattern = "([a-z])([A-Z])"
-        let regex = try! NSRegularExpression(pattern: pattern, options: [])
-
-        // Perform the replacement operation
-        let range = NSRange(location: 0, length: input.count)
-        let snakeCase = regex.stringByReplacingMatches(in: input, options: [], range: range, withTemplate: "$1_$2")
-
-        // Convert to lowercase
-        return snakeCase.lowercased()
-    }
+//    private static func camelCaseToSnakeCase(_ input: String) -> String {
+//        // Create a regular expression to match the boundaries between lowercase and uppercase letters
+//        let pattern = "([a-z])([A-Z])"
+//        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+//
+//        // Perform the replacement operation
+//        let range = NSRange(location: 0, length: input.count)
+//        let snakeCase = regex.stringByReplacingMatches(in: input, options: [], range: range, withTemplate: "$1_$2")
+//
+//        // Convert to lowercase
+//        return snakeCase.lowercased()
+//    }
 }
